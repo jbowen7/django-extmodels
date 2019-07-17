@@ -1,0 +1,13 @@
+env
+run
+src/*
+.idea
+.tox
+.env
+.coverage
+
+*.egg-info
+*.swp
+*.pyc
+
+!src/django_extmodels
