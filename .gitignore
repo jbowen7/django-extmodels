@@ -1,5 +1,7 @@
 env
 run
+dist
+build
 src/*
 .idea
 .tox
