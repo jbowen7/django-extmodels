@@ -1,4 +1,4 @@
-# django_extmodels
+# django-extmodels
 Extending the usage of Django Models
 
 ### Install
