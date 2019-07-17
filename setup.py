@@ -15,6 +15,7 @@ with open(os.path.join(base_dir, 'requirements.txt')) as f:
 setup(
 	name=NAME,
 	version=VERSION,
+	description='Extended the utility of Django Models',
 	author='John Bowen',
 	author_email='jbowen7@gmail.com',
 	package_dir={'': 'src'},
