@@ -7,5 +7,5 @@ class ExtManager(models.Manager):
 	def get_queryset(self):
 		return ExtQuerySet(self.model, using=self._db)
 
-	def cached_count(self):
-		return self.get_queryset().cached_count()
+	def cached_count(self, *args, **kwargs):
+		return self.get_queryset().cached_count(*args, **kwargs)
