@@ -2,21 +2,34 @@ from django_extmodels.settings import ext_settings
 
 
 class ExtOptions:
+	DEFAULT_OPTIONS = ext_settings['DEFAULT_META']
+
 	def __init__(self, extmeta=None):
+		"""
+		ExtOptions must be declared in settings
+
+		:param extmeta: must have __dict__
+		"""
 		# Set the defaults defined in django.conf.settings
-		for attr, value in ext_settings['DEFAULT_META'].items():
+		for attr, value in self.DEFAULT_OPTIONS.items():
 			setattr(self, attr, value)
 
-		# Override defaults (if passed in)
 		if extmeta:
-			meta_attrs = extmeta.__dict__.copy()
-			for name, value in meta_attrs.items():
-				if name.startswith('_'):
-					continue
-				elif name in self.__dict__:
-					setattr(self, name, value)
-				else:
-					raise TypeError(f"'class {ext_settings['META_NAME']}' got invalid attribute: {name}")
+			self._merge_options(extmeta)
+
+	def _merge_options(self, extmeta):
+		"""
+		Merge options from another object into this one
+		:param extmeta: must have __dict__
+		"""
+		meta_attrs = extmeta.__dict__.copy()
+		for name, value in meta_attrs.items():
+			if name in self.DEFAULT_OPTIONS:
+				setattr(self, name, value)
+			elif name.startswith('_'):
+				continue
+			else:
+				raise TypeError(f"'class {ext_settings['META_NAME']}' got invalid attribute: {name}")
 
 	def __set_name__(self, owner, name):
 		self.model = owner
