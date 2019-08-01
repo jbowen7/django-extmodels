@@ -43,3 +43,8 @@ assert ext_settings['META_ATTR'].isidentifier(), "META_ATTR must be a valid vari
 assert isinstance(ext_settings['DEFAULT_META'], dict)
 assert isinstance(ext_settings['DEFAULT_META']['prefer_cached_count'], bool)
 assert isinstance(ext_settings['DEFAULT_META']['cached_count_timeout'], int)
+
+# Disallow values with underscore
+for key in ext_settings['DEFAULT_META']:
+	if key.startswith('_'):
+		raise TypeError(f"got invalid attribute: {key}, must not being with `_`")
