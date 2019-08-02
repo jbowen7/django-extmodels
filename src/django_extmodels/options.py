@@ -10,6 +10,10 @@ class ExtOptions:
 
 		:param extmeta: must have __dict__
 		"""
+		# Set later by descriptor
+		self._model = None
+		self._name = None
+
 		# Set the defaults defined in django.conf.settings
 		for attr, value in self.DEFAULT_OPTIONS.items():
 			setattr(self, attr, value)
@@ -20,6 +24,7 @@ class ExtOptions:
 	def _merge_options(self, extmeta):
 		"""
 		Merge options from another object into this one
+
 		:param extmeta: must have __dict__
 		"""
 		meta_attrs = extmeta.__dict__.copy()
@@ -32,7 +37,8 @@ class ExtOptions:
 				raise TypeError(f"'class {ext_settings['META_NAME']}' got invalid attribute: {name}")
 
 	def __set_name__(self, owner, name):
-		self.model = owner
+		self._model = owner
+		self._name = name
 
 	def __repr__(self):
-		return f"<ExtOptions for {self.model.__name__}>"
+		return f"<ExtOptions for {self._model.__name__}>"

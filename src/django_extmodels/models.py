@@ -17,27 +17,21 @@ class ExtModelBase(models.base.ModelBase):
 		if not parents:
 			return super_new(cls, name, bases, attrs)
 
-		# If new class overrides ExtMeta pop here to add later
-		attr_meta = attrs.get(META_CLASS_NAME, None)
+		# Preserve ExtOptions inherited by most recent parent
+		base_meta = None
+		for base in bases:
+			base_meta = getattr(base, META_ATTR_NAME, None)
+			if base_meta: break  # noqa
 
-		# Create class
-		new_class = super_new(cls, name, bases, attrs)
+		# Contribute to attrs before super constructor
+		attrs[META_ATTR_NAME] = ExtOptions(base_meta)
 
-		# Most recent declaration of `class ExtMeta:` (if not inheritted, None is used)
-		meta = attr_meta or getattr(new_class, META_CLASS_NAME, None)
-
-		# Check for _extmeta on the parent class, which will be used for merging
-		base_meta = getattr(new_class, META_ATTR_NAME, None)
-
-		# Update options with meta if it was passed or inherited
-		options = ExtOptions(base_meta)
+		# If new_class declared `class ExtMeta` this will override the parent options
+		meta = attrs.get(META_CLASS_NAME, None)
 		if meta:
-			options._merge_options(meta)
+			attrs.get(META_ATTR_NAME)._merge_options(meta)
 
-		# Add ExtMeta
-		setattr(new_class, META_ATTR_NAME, options)
-
-		return new_class
+		return super_new(cls, name, bases, attrs)
 
 
 class ExtModel(models.Model, metaclass=ExtModelBase):
