@@ -5,7 +5,7 @@ import os
 from setuptools import find_packages, setup
 
 NAME = 'django-extmodels'
-VERSION = '0.2.1'
+VERSION = '0.3.0'
 
 
 base_dir = os.path.dirname(__file__)
@@ -15,7 +15,7 @@ with open(os.path.join(base_dir, 'requirements.txt')) as f:
 setup(
 	name=NAME,
 	version=VERSION,
-	description='Extended the utility of Django Models',
+	description='Extending the utility of Django Models',
 	author='John Bowen',
 	author_email='jbowen7@gmail.com',
 	package_dir={'': 'src'},
