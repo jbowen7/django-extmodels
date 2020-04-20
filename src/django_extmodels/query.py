@@ -1,6 +1,7 @@
 import hashlib
 
 from django.core.cache import cache
+from django.core.exceptions import EmptyResultSet
 from django.db import models
 
 from django_extmodels.utils import generate_count_query, get_extmeta
@@ -17,8 +18,14 @@ class ExtQuerySet(models.QuerySet):
 		:param recount: if True then perform count and update cache with `SELECT COUNT()`
 		:returns: number of records as an integer
 		"""
+		# Not all querysets generate valid SQL code
+		# https://code.djangoproject.com/ticket/22973
+		try:
+			query = generate_count_query(self.query)
+		except EmptyResultSet:
+			return 0
+
 		# Key to use for cache
-		query = generate_count_query(self.query)
 		key = f"{query}; using={self.db}"
 		hashed_key = hashlib.sha1(key.encode()).hexdigest()
 
