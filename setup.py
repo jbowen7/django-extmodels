@@ -5,7 +5,7 @@ import os
 from setuptools import find_packages, setup
 
 NAME = 'django-extmodels'
-VERSION = '0.3.0'
+VERSION = '0.3.1'
 
 
 base_dir = os.path.dirname(__file__)
